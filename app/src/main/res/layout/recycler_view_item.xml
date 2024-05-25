@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card-view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:longClickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card-view:cardBackgroundColor="#FFFFFF"
+    card-view:cardCornerRadius="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivImagen"
+            android:layout_width="138dp"
+            android:layout_height="138dp"
+            android:contentDescription="@string/poster"
+            card-view:layout_constraintBottom_toBottomOf="parent"
+            card-view:layout_constraintStart_toStartOf="parent"
+            card-view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:maxWidth="200dp"
+            android:maxLines="3"
+            card-view:layout_constraintEnd_toEndOf="parent"
+            card-view:layout_constraintStart_toEndOf="@id/ivImagen"
+            card-view:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:maxWidth="200dp"
+            android:maxLines="6"
+            card-view:layout_constraintEnd_toEndOf="parent"
+            card-view:layout_constraintStart_toEndOf="@id/ivImagen"
+        card-view:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        />
+
+        <TextView
+            android:id="@+id/tvCantidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="5dp"
+            card-view:layout_constraintBottom_toBottomOf="parent"
+            card-view:layout_constraintEnd_toEndOf="parent"
+            card-view:layout_constraintTop_toBottomOf="@+id/tvDesc"
+            card-view:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

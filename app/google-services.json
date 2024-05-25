@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "364309832180",
+    "project_id": "kontakto-717f3",
+    "storage_bucket": "kontakto-717f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364309832180:android:e3df54dbbbe2241b4b59a1",
+        "android_client_info": {
+          "package_name": "com.example.recyclerviewhorizontal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRhio2ym1_gDe8oUAMyZcDIBkuW9yAASw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

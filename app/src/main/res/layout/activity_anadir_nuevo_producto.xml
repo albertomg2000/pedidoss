@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_view_nombre2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre del Producto"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_text_nombre2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_nombre2"
+        android:layout_marginBottom="16dp"
+        android:hint="Ingrese el nombre del producto"/>
+
+    <TextView
+        android:id="@+id/text_view_descripcion2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_nombre2"
+        android:text="Descripción del Producto"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_text_descripcion2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_descripcion2"
+        android:layout_marginBottom="16dp"
+        android:hint="Ingrese la descripción del producto"/>
+
+    <TextView
+        android:id="@+id/text_view_precio2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_descripcion2"
+        android:text="Precio del Producto"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edit_text_precio2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_precio2"
+        android:layout_marginBottom="16dp"
+        android:inputType="numberDecimal"
+        android:hint="Ingrese el precio del producto"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_por_kilo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_precio2"
+        android:text="¿Precio por kilo?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/text_view_url2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkbox_por_kilo"
+        android:text="Imagen del Producto"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/button_seleccionar_imagen2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_url2"
+        android:textColor="#FFFFFF"
+        android:background="#FFA6B5B9"
+        android:text="Seleccionar Imagen"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/button_guardar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:background="#FFA6B5B9"
+        android:layout_below="@id/button_seleccionar_imagen2"
+        android:text="Guardar"/>
+
+</RelativeLayout>
