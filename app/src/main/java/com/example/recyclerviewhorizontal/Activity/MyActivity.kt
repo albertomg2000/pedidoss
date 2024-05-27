@@ -215,7 +215,7 @@ class MyActivity : AppCompatActivity() {
                     document.reference.delete()
                         .addOnSuccessListener {
                             mostrarToast("Marca ${marca.nombre} eliminado correctamente")
-                            obtenerDatosMarcass()
+                            obtenerDatosMarcas()
                         }
                         .addOnFailureListener { e ->
                             mostrarToast("Error al eliminar el producto ${marca.nombre}: ${e.message}")

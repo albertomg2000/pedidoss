@@ -64,7 +64,7 @@ class ProductosActivity : AppCompatActivity() {
                 override fun OnItemClick(vista: View, position: Int) {
                     val selectedFruta = mAdapter.frutas[position]
                     if (selectedFruta.nombre == "AÑADIR NUEVO PRODUCTO") {
-                        val intent = Intent(this@MainActivity, AnadirNuevoProductoActivity::class.java)
+                        val intent = Intent(this@ProductosActivity, AnadirNuevoProductoActivity::class.java)
                         intent.putExtra("nombreMarca", Marca)
                         startActivity(intent)
                     } else {
@@ -76,7 +76,7 @@ class ProductosActivity : AppCompatActivity() {
                 override fun OnImageClick(vista: View, position: Int) {
                     val selectedFruta = mAdapter.frutas[position]
                     if (selectedFruta.nombre == "AÑADIR NUEVO PRODUCTO") {
-                        val intent = Intent(this@MainActivity, AnadirNuevoProductoActivity::class.java)
+                        val intent = Intent(this@ProductosActivity, AnadirNuevoProductoActivity::class.java)
                         intent.putExtra("nombreMarca", Marca)
                         startActivity(intent)
                     } else {
@@ -94,6 +94,14 @@ class ProductosActivity : AppCompatActivity() {
                         builder.setMessage("¿Estás seguro que quieres eliminar ${selectedFruta.nombre}?")
                         builder.setPositiveButton("Sí") { _, _ ->
                             eliminarProducto(selectedFruta)
+                        }
+                        builder.setNeutralButton("Modificar") { _, _ ->
+                            val intent = Intent(this@ProductosActivity, ModificarProductoActivity::class.java)
+                            intent.putExtra("producto_nombre", selectedFruta.nombre)
+                            intent.putExtra("producto_descripcion", selectedFruta.descripcion)
+                            intent.putExtra("producto_url", selectedFruta.imagen)
+                            intent.putExtra("producto_precio", selectedFruta.cantidad)
+                            startActivity(intent)
                         }
                         builder.setNegativeButton("Cancelar", null)
                         val dialog = builder.create()
