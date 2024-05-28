@@ -1,9 +1,9 @@
 
 package com.example.recyclerviewhorizontal.Activity
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +13,6 @@ import com.example.recyclerviewhorizontal.Clases.Pedido
 import com.example.recyclerviewhorizontal.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import android.widget.Button
 import com.example.recyclerviewhorizontal.Clases.ProductoItem
 import com.example.recyclerviewhorizontal.EmailUtil
 import com.google.android.gms.tasks.Task
@@ -28,13 +27,27 @@ class PedidoCliente : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pedido_cliente)
+        //siempre necesitamos el id del usuario
         val uid = intent.getStringExtra("USER_UID")
         usuarioId = uid!!
         recyclerView = findViewById(R.id.recyclerViewPedidos)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        //Me lleva al perfil del usuario
+        val perfil: ImageButton = findViewById(R.id.profileButton)
+        perfil.setOnClickListener {
+            val intent = Intent(this, Perfil::class.java)
+            intent.putExtra("USER_UID", usuarioId)
+            startActivity(intent)
+        }
 
-        val btnEnviarPedido: Button = findViewById(R.id.btnEnviarPedido)
-
+        val logoImageView: ImageView = findViewById(R.id.logoImageView)
+        //Pinchar el logo me devuelve a la pagina principal
+        logoImageView.setOnClickListener {
+            val intent = Intent(this, MyActivity::class.java)
+            intent.putExtra("USER_UID", usuarioId)
+            startActivity(intent)
+        }
+        //cada usuario tiene una coleccion de  pedido en la base de datos
         val currentUser = auth.currentUser
         currentUser?.let {
             val usuarioId = uid
@@ -54,7 +67,7 @@ class PedidoCliente : AppCompatActivity() {
                         val pedidoAdapter = AdaptadorPedidos(productos, document.id)
                         recyclerView.adapter = pedidoAdapter
                     }
-
+                    //No enviar pedidos sin productos
                     if (productos.isEmpty()) {
                         Toast.makeText(this, "Pedido vacío", Toast.LENGTH_SHORT).show()
                     }
@@ -63,7 +76,8 @@ class PedidoCliente : AppCompatActivity() {
                     Toast.makeText(this, "Error al obtener pedidos: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
         }
-
+        //Boton para enviar el pedido
+        val btnEnviarPedido: Button = findViewById(R.id.btnEnviarPedido)
         btnEnviarPedido.setOnClickListener {
             if (productos.isEmpty()) {
                 Toast.makeText(this, "Pedido vacío", Toast.LENGTH_SHORT).show()
@@ -72,7 +86,7 @@ class PedidoCliente : AppCompatActivity() {
             }
         }
     }
-
+    //Este dialogo me sirve para poder escribir contenido en el email que se enviara del cliente al propietario
     private fun mostrarDialogoObservaciones() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Observaciones (opcional)")
@@ -91,7 +105,7 @@ class PedidoCliente : AppCompatActivity() {
 
         builder.show()
     }
-    //envia el correo al email del admin
+    //envia el correo al email del propietario
     private fun enviarCorreo(observaciones: String) {
         val email = "cuentaparasubirproyectosdedam@gmail.com" //poner email que quiere recibir el pedido
         val subject = "Pedido de Cliente"
@@ -119,7 +133,7 @@ class PedidoCliente : AppCompatActivity() {
             }
         }
     }
-
+    //construccion del email que se enviara
     private fun buildEmailBody(nombre: String, email: String, telefono: String, observaciones: String): String {
         val pedidoDetalles = productos.joinToString(separator = "\n") { "${it.nombre.replace(" ", "_")}: ${it.cantidad}" }
         val cuerpo = """
@@ -136,7 +150,7 @@ class PedidoCliente : AppCompatActivity() {
 
         return cuerpo
     }
-
+    // Informacion del usuario que se enviara por correo
     private fun obtenerInformacionUsuario(usuarioId: String): Task<Map<String, String>> {
         val usuarioInfo = mutableMapOf<String, String>()
         val documentRef = db.collection("users").document(usuarioId)
@@ -151,7 +165,7 @@ class PedidoCliente : AppCompatActivity() {
                 usuarioInfo
             }
     }
-
+    //Cuando le del boton de enviar la coleccion de pedido del usuario quedara vaciada
     private fun eliminarPedidoYActualizarLista() {
         db.collection("pedidos")
             .whereEqualTo("usuario", usuarioId)

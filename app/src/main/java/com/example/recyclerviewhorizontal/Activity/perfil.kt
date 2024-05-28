@@ -29,18 +29,19 @@ class Perfil : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         usuarioId = intent.getStringExtra("USER_UID") ?: ""
 
+        //los campos que tengo del usuario
         tvEmail = findViewById(R.id.tvEmail)
         etNombre = findViewById(R.id.etNombre)
         etTelefono = findViewById(R.id.etTelefono)
-        btnGuardar = findViewById(R.id.btnGuardar)
 
+        btnGuardar = findViewById(R.id.btnGuardar)
         obtenerInformacionUsuario(usuarioId)
 
         btnGuardar.setOnClickListener {
             guardarCambiosUsuario()
         }
     }
-
+    // Obtengo la informacion de mi usuario
     private fun obtenerInformacionUsuario(usuarioId: String) {
         db.collection("users").document(usuarioId)
             .get()
@@ -75,7 +76,7 @@ class Perfil : AppCompatActivity() {
             "name" to nombre,
             "phone" to telefono
         )
-
+        //Actualizar los datos
         db.collection("users").document(usuarioId)
             .update(usuarioUpdates as Map<String, Any>)
             .addOnSuccessListener {

@@ -42,7 +42,6 @@ class MyActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val uid = intent.getStringExtra("USER_UID")
         iduser = uid!!
-
         val gridView: GridView = findViewById(R.id.grid_view)
         categoryViewPager = findViewById(R.id.category_recycler_view) // Cambio a RecyclerView
 
@@ -98,7 +97,8 @@ class MyActivity : AppCompatActivity() {
         obtenerCategorias()
         obtenerDatosMarcas()
     }
-
+    //necesito recopilar las categorias existentes de los productos y que no se repitan
+    //para poder crear un carousel de botones con dichas marcas
     private fun obtenerCategorias() {
         val marcasRef = db.collection("marcas")
         marcasRef.get()
@@ -135,7 +135,7 @@ class MyActivity : AppCompatActivity() {
         categoryViewPager.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         categoryViewPager.adapter = adapter
     }
-
+    //Me da todas las categorias, esta funcion se usa cuando pulse boton Todos
     private fun obtenerDatosMarcas() {
         val productosRef = db.collection("marcas")
         productosRef.orderBy("nombre", Query.Direction.ASCENDING).get()
@@ -230,7 +230,7 @@ class MyActivity : AppCompatActivity() {
     private fun mostrarToast(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
-
+    //cuando pulse anadir marca me llevara al activity para crear una nueva marca
     fun abrirMainActivity(nombreItem: String) {
         if (nombreItem == "Añadir Marca") {
             val intent = Intent(this, AñadirMarcaActivity::class.java)
@@ -242,8 +242,11 @@ class MyActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    override fun onBackPressed() {
+        //no ir a ningun sitio, estoy en la pagina principal y raiz
+    }
 
     companion object {
-        private const val TAG = "marcas_main"
+        private const val TAG = "MyActivity"
     }
 }

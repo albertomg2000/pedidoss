@@ -7,7 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +26,7 @@ import java.util.*
 
 
 private val db = FirebaseFirestore.getInstance()
-var id=""
+private var id=""
 class ProductosActivity : AppCompatActivity() {
     private lateinit var mAdapter: MyAdapter
     private lateinit var id: String
@@ -35,21 +37,30 @@ class ProductosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.productos)
         val toolbar = findViewById<Toolbar>(R.id.custom_toolbar)
+        val logoImageView: ImageView = findViewById(R.id.logoImageView)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         //dependiendo del nombre de la marca que me pase el marca activity cogere una lista de productos o otra
         val nombreItem = intent.getStringExtra("nombreMarca")
         Marca = nombreItem!!
+        //necesito saber la id del usuario siempre
         id = intent.getStringExtra("USER_UID")!!
-
+        logoImageView.setOnClickListener {
+            // Cuando clicke sobre el logo me llevara a la pagina principal
+            val intent = Intent(this, MyActivity::class.java)
+            intent.putExtra("USER_UID", id)
+            startActivity(intent)
+        }
         val mRecyclerView: RecyclerView = findViewById(R.id.recyclerView)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
+        //boton que lleva a mi pedido
         val storeButton: ImageButton = findViewById(R.id.storeButton)
         storeButton.setOnClickListener {
             val intent = Intent(this, PedidoCliente::class.java)
             intent.putExtra("USER_UID", id)
             startActivity(intent)
         }
+        //boton que me lleva a mi perfil
         val perfil: ImageButton = findViewById(R.id.profileButton)
         perfil.setOnClickListener {
             val intent = Intent(this, Perfil::class.java)
@@ -60,7 +71,8 @@ class ProductosActivity : AppCompatActivity() {
         mAdapter = MyAdapter(
             mutableListOf(),
             object : OnItemClickListener {
-                //si le doy a añadir nuevo producto me lleva a su activity para anadir sino se me anade al pedido
+                //si le doy a añadir nuevo producto me lleva a su activity para anadir un nuevo producto
+                // si le doy click a un producto que no sea el de anadir se me anade el producto al pedido
                 override fun OnItemClick(vista: View, position: Int) {
                     val selectedFruta = mAdapter.frutas[position]
                     if (selectedFruta.nombre == "AÑADIR NUEVO PRODUCTO") {
@@ -71,7 +83,8 @@ class ProductosActivity : AppCompatActivity() {
                         agregarProductoAPedido(selectedFruta.nombre, selectedFruta.descripcion)                    }
                 }
             },
-            //si le doy a añadir nuevo producto me lleva a su activity para anadir sino se me anade al pedido
+            //si le doy a añadir nuevo producto me lleva a su activity para anadir un nuevo producto
+            // si le doy click a un producto que no sea el de anadir se me anade el producto al pedido
             object : OnImageClickListener {
                 override fun OnImageClick(vista: View, position: Int) {
                     val selectedFruta = mAdapter.frutas[position]
@@ -97,10 +110,12 @@ class ProductosActivity : AppCompatActivity() {
                         }
                         builder.setNeutralButton("Modificar") { _, _ ->
                             val intent = Intent(this@ProductosActivity, ModificarProductoActivity::class.java)
-                            intent.putExtra("producto_nombre", selectedFruta.nombre)
-                            intent.putExtra("producto_descripcion", selectedFruta.descripcion)
-                            intent.putExtra("producto_url", selectedFruta.imagen)
-                            intent.putExtra("producto_precio", selectedFruta.cantidad)
+                            intent.putExtra("nombreProducto", selectedFruta.nombre)
+                            intent.putExtra("descripcionProducto", selectedFruta.descripcion)
+                            intent.putExtra("nombreMarca", Marca)
+                            intent.putExtra("nombreImagen", selectedFruta.imagen)
+                            intent.putExtra("precioProducto", selectedFruta.cantidad)
+                            intent.putExtra("USER_UID",id)
                             startActivity(intent)
                         }
                         builder.setNegativeButton("Cancelar", null)
@@ -213,9 +228,14 @@ class ProductosActivity : AppCompatActivity() {
     private fun mostrarToast(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
-
+    //Me lleva a la pagina anterior que siempre es la pagina principal
+    override fun onBackPressed() {
+        val intent = Intent(this@ProductosActivity, MyActivity::class.java)
+        intent.putExtra("USER_UID", id)
+        startActivity(intent)
+    }
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "ProductosActivity"
     }
 }
 
