@@ -12,7 +12,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
         // Delay for 2 seconds
         Handler(Looper.getMainLooper()).postDelayed({
             // Start the main activity

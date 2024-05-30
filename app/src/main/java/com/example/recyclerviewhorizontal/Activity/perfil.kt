@@ -2,10 +2,7 @@ package com.example.recyclerviewhorizontal.Activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.recyclerviewhorizontal.R
@@ -39,6 +36,13 @@ class Perfil : AppCompatActivity() {
 
         btnGuardar.setOnClickListener {
             guardarCambiosUsuario()
+        }
+
+        val storeButton: ImageButton = findViewById(R.id.storeButton)
+        storeButton.setOnClickListener {
+            val intent = Intent(this, PedidoCliente::class.java)
+            intent.putExtra("USER_UID", usuarioId)
+            startActivity(intent)
         }
     }
     // Obtengo la informacion de mi usuario

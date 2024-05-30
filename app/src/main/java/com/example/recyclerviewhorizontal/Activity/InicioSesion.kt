@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recyclerviewhorizontal.R
 import com.google.firebase.auth.FirebaseAuth
+import android.content.Context
+import android.content.SharedPreferences
 
 class InicioSesion : AppCompatActivity() {
 
@@ -28,13 +30,17 @@ class InicioSesion : AppCompatActivity() {
         buttonLogin.setOnClickListener {
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
-            //comprueba si la cuenta esta registrada
+            // Comprueba si la cuenta está registrada
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val user = auth.currentUser
                             val uid = user?.uid
+
+                            // Guardar los datos de autenticación en SharedPreferences
+                            saveLoginData(uid!!)
+
                             val intent = Intent(this, MyActivity::class.java)
                             intent.putExtra("USER_UID", uid)
                             startActivity(intent)
@@ -47,7 +53,7 @@ class InicioSesion : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, ingrese correo y contraseña", Toast.LENGTH_SHORT).show()
             }
         }
-        //redirige a registrarte
+        // Redirige a registrarse
         buttonRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -71,4 +77,14 @@ class InicioSesion : AppCompatActivity() {
             }
         }
     }
+
+    // Función para guardar los datos de autenticación
+    private fun saveLoginData(uid: String) {
+        val sharedPref: SharedPreferences = getSharedPreferences("LoginData", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("USER_UID", uid)
+            apply()
+        }
+    }
 }
+

@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ImageView
@@ -50,7 +51,6 @@ class AdaptadorPedidos(
             textViewDescripcion.text = productoItem.descripcion
             textViewCantidad.text = "Cantidad: ${productoItem.cantidad}"
 
-
             val nombreImagen = (productoItem.nombre + productoItem.descripcion).replace("@", "")
             val storageReference = FirebaseStorage.getInstance().reference.child("images/$nombreImagen.jpg")
             storageReference.downloadUrl.addOnSuccessListener { uri ->
@@ -63,45 +63,51 @@ class AdaptadorPedidos(
         override fun onClick(v: View?) {
             val position = adapterPosition
             val productoItem = productos[position]
-            AlertDialog.Builder(itemView.context)
-                .setTitle(productoItem.nombre)
-                .setMessage("¿Qué quieres hacer?")
-                .setPositiveButton("Decrementar") { dialog, which ->
-                    eliminarProducto(position)
-                }
-                .setNegativeButton("Incrementar") { dialog, which ->
-                    incrementarCantidad(position)
-                }
-                .setNeutralButton("Cancelar", null)
-                .show()
+            showQuantityDialog(productoItem, position)
         }
 
-        private fun eliminarProducto(position: Int) {
-            val productoItem = productos[position]
+        private fun showQuantityDialog(productoItem: ProductoItem, position: Int) {
+            val dialogView = LayoutInflater.from(itemView.context).inflate(R.layout.dialogo_pedido, null)
+            val productName: TextView = dialogView.findViewById(R.id.dialog_product_name)
+            val quantityText: TextView = dialogView.findViewById(R.id.quantity_text)
+            val buttonIncrement: Button = dialogView.findViewById(R.id.button_increment)
+            val buttonDecrement: Button = dialogView.findViewById(R.id.button_decrement)
+            val buttonAccept: Button = dialogView.findViewById(R.id.button_accept)
 
-            // Actualizar la lista localmente
-            if (productoItem.cantidad > 1) {
-                productos[position] = productoItem.copy(cantidad = productoItem.cantidad - 1)
-            } else {
-                productos.removeAt(position)
+            productName.text = productoItem.nombre
+            quantityText.text = productoItem.cantidad.toString()
+
+            buttonIncrement.setOnClickListener {
+                productoItem.cantidad++
+                quantityText.text = productoItem.cantidad.toString()
             }
-            notifyDataSetChanged()
 
-            // Actualizar en Firebase Firestore
-            val updatedProductos = productos.flatMap { item -> List(item.cantidad) { "${item.nombre}@${item.descripcion}" } }
-            FirebaseFirestore.getInstance().collection("pedidos")
-                .document(pedidoId)
-                .update("productos", updatedProductos)
+            buttonDecrement.setOnClickListener {
+                if (productoItem.cantidad > 0) {
+                    productoItem.cantidad--
+                    quantityText.text = productoItem.cantidad.toString()
+                }
+            }
+
+            val alertDialog = AlertDialog.Builder(itemView.context)
+                .setView(dialogView)
+                .create()
+
+            buttonAccept.setOnClickListener {
+                if (productoItem.cantidad == 0) {
+                    productos.removeAt(position)
+                    notifyItemRemoved(position)
+                } else {
+                    notifyItemChanged(position)
+                }
+                updateFirebase()
+                alertDialog.dismiss()
+            }
+
+            alertDialog.show()
         }
 
-        private fun incrementarCantidad(position: Int) {
-            val productoItem = productos[position]
-
-            // Actualizar la lista localmente
-            productos[position] = productoItem.copy(cantidad = productoItem.cantidad + 1)
-            notifyDataSetChanged()
-
-            // Actualizar en Firebase Firestore
+        private fun updateFirebase() {
             val updatedProductos = productos.flatMap { item -> List(item.cantidad) { "${item.nombre}@${item.descripcion}" } }
             FirebaseFirestore.getInstance().collection("pedidos")
                 .document(pedidoId)
@@ -109,4 +115,5 @@ class AdaptadorPedidos(
         }
     }
 }
+
 

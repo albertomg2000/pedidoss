@@ -133,24 +133,28 @@ class PedidoCliente : AppCompatActivity() {
             }
         }
     }
-    //construccion del email que se enviara
-    private fun buildEmailBody(nombre: String, email: String, telefono: String, observaciones: String): String {
-        val pedidoDetalles = productos.joinToString(separator = "\n") { "${it.nombre.replace(" ", "_")}: ${it.cantidad}" }
-        val cuerpo = """
-            Nombre: $nombre
-            Correo Electrónico: $email
-            Teléfono: $telefono
-            
-            Detalles del Pedido:
-            $pedidoDetalles
-            
-            Observaciones:
-            $observaciones
-        """.trimIndent()
 
+    // Construcción del email que se enviará
+    private fun buildEmailBody(nombre: String, email: String, telefono: String, observaciones: String): String {
+        val pedidoDetalles = productos.joinToString(separator = "\n") {
+            val descripcion = if (it.descripcion.isNotEmpty()) " - ${it.descripcion}" else ""
+            "${it.nombre.replace(" ", "_")}$descripcion: ${it.cantidad}"
+        }
+        val cuerpo = """
+        Nombre: $nombre
+        Correo Electrónico: $email
+        Teléfono: $telefono
+        
+        Detalles del Pedido:
+        $pedidoDetalles
+        
+        Observaciones:
+        $observaciones
+    """.trimIndent()
         return cuerpo
     }
-    // Informacion del usuario que se enviara por correo
+
+    // Información del usuario que se enviará por correo
     private fun obtenerInformacionUsuario(usuarioId: String): Task<Map<String, String>> {
         val usuarioInfo = mutableMapOf<String, String>()
         val documentRef = db.collection("users").document(usuarioId)

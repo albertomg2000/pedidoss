@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +25,6 @@ import java.util.*
 
 
 private val db = FirebaseFirestore.getInstance()
-private var id=""
 class ProductosActivity : AppCompatActivity() {
     private lateinit var mAdapter: MyAdapter
     private lateinit var id: String
@@ -100,7 +98,7 @@ class ProductosActivity : AppCompatActivity() {
             object : OnItemLongClickListener {
                 //si mi id es la del admin puedo borrar el producto
                 override fun onItemLongClick(view: View, position: Int): Boolean {
-                    if (id == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1") {
+                    if (id == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1" || id == "hItfLBPssfRLBAOPTQeXhkrDNrY2") {
                         val selectedFruta = mAdapter.frutas[position]
                         val builder = AlertDialog.Builder(view.context)
                         builder.setTitle("Eliminar Producto")
@@ -148,7 +146,7 @@ class ProductosActivity : AppCompatActivity() {
                 }
                 //queria que la lista se me listara alreves, de forma que los creados recientemente vayan al final
                 frutas.reverse()
-                if (id == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1") {
+                if (id == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1" || id == "hItfLBPssfRLBAOPTQeXhkrDNrY2") {
                     frutas.add(
                         Fruta(
                             "AÑADIR NUEVO PRODUCTO",

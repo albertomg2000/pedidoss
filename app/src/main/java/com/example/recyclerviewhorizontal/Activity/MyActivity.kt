@@ -22,7 +22,6 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.recyclerviewhorizontal.*
 import com.example.recyclerviewhorizontal.Adaptadores.CarouselAdapter
 import com.google.android.gms.common.util.CollectionUtils.listOf
@@ -75,7 +74,7 @@ class MyActivity : AppCompatActivity() {
             },
             object : OnItemLongClickListener {
                 override fun onItemLongClick(view: View, position: Int): Boolean {
-                    if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1") {
+                    if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1" || iduser == "hItfLBPssfRLBAOPTQeXhkrDNrY2") {
                         val selectedMarca = mAdapter.getItem(position) as Marca
                         val builder = AlertDialog.Builder(view.context)
                         builder.setTitle("Eliminar Marca")
@@ -93,7 +92,6 @@ class MyActivity : AppCompatActivity() {
         )
 
         gridView.adapter = mAdapter
-
         obtenerCategorias()
         obtenerDatosMarcas()
     }
@@ -162,7 +160,7 @@ class MyActivity : AppCompatActivity() {
                     }
                 }.thenBy { it.nombre.toLowerCase() })
 
-                if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1") {
+                if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1" || iduser == "hItfLBPssfRLBAOPTQeXhkrDNrY2") {
                     marcas.add(
                         Marca(
                             "Añadir Marca",
@@ -194,7 +192,7 @@ class MyActivity : AppCompatActivity() {
                 }
                 // Ordenar las marcas por el primer elemento de su categoría
                 marcas.sortWith(compareBy { it.categorias.firstOrNull()?.toLowerCase() ?: "" })
-                if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1") {
+                if (iduser == "LtSOHEAwnSdiNEWGdDLPbbWUjrs1" || iduser == "hItfLBPssfRLBAOPTQeXhkrDNrY2") {
                     marcas.add(Marca("Añadir Marca", "https://cdn.iconscout.com/icon/free/png-256/free-add-1467-470388.png", listOf()))
                 }
                 // Actualizamos el adaptador con las marcas filtradas
